@@ -1,0 +1,232 @@
+/**
+ * Global styles
+ *
+ * @description Base styles and common utility classes
+ */
+
+@use './variables.scss' as *;
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: $text-primary;
+  background-color: $bg-secondary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(144, 147, 153, 0.5);
+  border-radius: 4px;
+
+  &:hover {
+    background-color: rgba(144, 147, 153, 0.7);
+  }
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Common utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+}
+
+.flex {
+  display: flex;
+
+  &-center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-between {
+    justify-content: space-between;
+  }
+
+  &-column {
+    flex-direction: column;
+  }
+}
+
+.text {
+  &-center {
+    text-align: center;
+  }
+
+  &-left {
+    text-align: left;
+  }
+
+  &-right {
+    text-align: right;
+  }
+
+  &-primary {
+    color: $primary-color;
+  }
+
+  &-success {
+    color: $success-color;
+  }
+
+  &-warning {
+    color: $warning-color;
+  }
+
+  &-danger {
+    color: $danger-color;
+  }
+
+  &-secondary {
+    color: $text-secondary;
+  }
+}
+
+.mb {
+  &-xs {
+    margin-bottom: $spacing-xs;
+  }
+
+  &-sm {
+    margin-bottom: $spacing-sm;
+  }
+
+  &-md {
+    margin-bottom: $spacing-md;
+  }
+
+  &-lg {
+    margin-bottom: $spacing-lg;
+  }
+
+  &-xl {
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.mt {
+  &-xs {
+    margin-top: $spacing-xs;
+  }
+
+  &-sm {
+    margin-top: $spacing-sm;
+  }
+
+  &-md {
+    margin-top: $spacing-md;
+  }
+
+  &-lg {
+    margin-top: $spacing-lg;
+  }
+
+  &-xl {
+    margin-top: $spacing-xl;
+  }
+}
+
+/* Card styles */
+.card {
+  background-color: $bg-primary;
+  border-radius: $border-radius-base;
+  box-shadow: $box-shadow-base;
+  padding: $spacing-md;
+  transition: $transition-base;
+
+  &:hover {
+    box-shadow: $box-shadow-light;
+  }
+}
+
+/* Link styles */
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: $transition-fast;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+/* Button reset */
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Image responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Loading animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide transition */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-leave-to {
+  transform: translateX(100%);
+}
