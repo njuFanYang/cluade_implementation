@@ -80,6 +80,10 @@ public enum ErrorCode {
     NOT_FOLLOWING_YET(4005, "Not following this user"),
     CANNOT_FOLLOW_SELF(4006, "Cannot follow yourself"),
     COMMENT_TOO_LONG(4007, "Comment exceeds maximum length"),
+    CANNOT_DELETE_COMMENT(4008, "Cannot delete this comment"),
+    COMMENT_PERMISSION_DENIED(4009, "Permission denied to access this comment"),
+    TARGET_NOT_FOUND(4010, "Target resource not found"),
+    INVALID_TARGET_TYPE(4011, "Invalid target type"),
 
     // Admin/System errors (5000-5999)
     AUDIT_RECORD_NOT_FOUND(5001, "Audit record not found"),
