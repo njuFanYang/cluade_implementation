@@ -46,15 +46,13 @@
             @click="handleAddToPlaylist"
           />
         </el-tooltip>
-        <el-tooltip :content="isLiked ? 'Unlike' : 'Like'">
-          <el-button
-            :icon="isLiked ? Star : StarFilled"
-            circle
-            text
-            @click="handleLike"
-            :class="{ liked: isLiked }"
-          />
-        </el-tooltip>
+        <LikeButton
+          target-type="MUSIC"
+          :target-id="music.id"
+          :initial-liked="music.isLiked || false"
+          :initial-count="music.likeCount || 0"
+          size="small"
+        />
         <el-tooltip content="Download">
           <el-button
             :icon="Download"
@@ -108,8 +106,6 @@ import { useUserStore } from '@/store/user'
 import {
   VideoPlay,
   FolderAdd,
-  Star,
-  StarFilled,
   Download,
   More,
   View,
@@ -120,6 +116,7 @@ import {
   Headset
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { LikeButton } from '@/components/social'
 
 const props = defineProps({
   music: {
@@ -147,9 +144,6 @@ const router = useRouter()
 const playerStore = usePlayerStore()
 const musicStore = useMusicStore()
 const userStore = useUserStore()
-
-// State
-const isLiked = ref(false) // TODO: Implement like status from backend
 
 // Computed
 const canEdit = computed(() => {
@@ -181,27 +175,6 @@ function handleAddToPlaylist() {
   // TODO: Show playlist selection dialog
   playerStore.addToPlaylist(props.music)
   ElMessage.success('Added to current playlist')
-}
-
-async function handleLike() {
-  if (!userStore.isLoggedIn) {
-    ElMessage.warning('Please login first')
-    return
-  }
-
-  try {
-    if (isLiked.value) {
-      await musicStore.unlikeMusic(props.music.id)
-      isLiked.value = false
-      ElMessage.success('Unliked')
-    } else {
-      await musicStore.likeMusic(props.music.id)
-      isLiked.value = true
-      ElMessage.success('Liked')
-    }
-  } catch (error) {
-    console.error('Like failed:', error)
-  }
 }
 
 function handleDownload() {

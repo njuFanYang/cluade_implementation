@@ -10,7 +10,12 @@
       "Bash(npm install:*)",
       "Bash(curl:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cmd /c dir /b \"C:\\\\learn\\\\-SpringBoot-Vue.js-\\\\frontend\\\\src\\\\components\")",
+      "Bash(cmd /c dir /b \"C:\\\\learn\\\\-SpringBoot-Vue.js-\\\\frontend\\\\src\\\\store\")",
+      "Bash(dir:*)",
+      "Bash(if not exist Social mkdir Social)",
+      "Bash(test:*)"
     ]
   }
 }

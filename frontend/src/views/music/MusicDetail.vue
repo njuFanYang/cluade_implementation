@@ -179,9 +179,12 @@
 
                     <el-tab-pane label="Comments" name="comments">
                       <div class="comments-section">
-                        <el-empty
-                          description="Comments feature coming soon"
-                          :image-size="100"
+                        <CommentSection
+                          target-type="MUSIC"
+                          :target-id="music.id"
+                          :auto-load="activeTab === 'comments'"
+                          @comments-loaded="handleCommentsLoaded"
+                          @comment-added="handleCommentAdded"
                         />
                       </div>
                     </el-tab-pane>
@@ -281,6 +284,7 @@ import {
   Collection
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { CommentSection } from '@/components/social'
 
 const route = useRoute()
 const router = useRouter()
@@ -467,6 +471,17 @@ function formatFileSize(bytes) {
 
 function onImageError(e) {
   e.target.src = '/default-cover.png'
+}
+
+// Comment handlers
+function handleCommentsLoaded({ total }) {
+  // Update comment count if needed
+  console.log(`Loaded ${total} comments`)
+}
+
+function handleCommentAdded(comment) {
+  // Handle new comment added
+  console.log('New comment added:', comment)
 }
 
 // Watchers

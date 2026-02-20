@@ -168,6 +168,19 @@
               />
             </el-card>
           </div>
+
+          <!-- Comments Section -->
+          <div class="comments-section-wrapper">
+            <el-card>
+              <CommentSection
+                target-type="PLAYLIST"
+                :target-id="playlist.id"
+                :auto-load="true"
+                @comments-loaded="handleCommentsLoaded"
+                @comment-added="handleCommentAdded"
+              />
+            </el-card>
+          </div>
         </div>
 
         <el-empty
@@ -239,6 +252,7 @@ import {
   Download
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { CommentSection } from '@/components/social'
 
 const route = useRoute()
 const router = useRouter()
@@ -458,6 +472,17 @@ function onImageError(e) {
   e.target.src = e.target.alt.includes('playlist') ? '/default-playlist.png' : '/default-cover.png'
 }
 
+// Comment handlers
+function handleCommentsLoaded({ total }) {
+  // Update comment count if needed
+  console.log(`Loaded ${total} comments`)
+}
+
+function handleCommentAdded(comment) {
+  // Handle new comment added
+  console.log('New comment added:', comment)
+}
+
 // Watchers
 watch(() => route.params.id, (newId) => {
   if (newId) {
@@ -658,6 +683,10 @@ onMounted(() => {
       }
     }
   }
+}
+
+.comments-section-wrapper {
+  margin-top: 24px;
 }
 
 // Responsive
