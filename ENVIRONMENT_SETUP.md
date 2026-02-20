@@ -198,31 +198,172 @@ REDIS_PORT=6380
 
 ---
 
+## MVP 测试准备（Phase 5 完成后）
+
+Phase 1-5 已全部完成（100% MVP），在开始 Phase 6 前，强烈建议完成本地环境测试：
+
+### 📋 测试前检查清单
+
+#### 1. 环境准备
+- [ ] JDK 17+ 已安装并配置
+- [ ] Maven 3.6+ 已安装并配置
+- [ ] Docker Desktop 正在运行
+- [ ] MySQL 数据库已启动
+- [ ] Node.js 20+ 已安装
+
+#### 2. 启动服务
+```bash
+# 1. 启动 Docker 服务（MySQL + Redis）
+docker-compose up -d
+
+# 2. 启动后端服务
+cd backend
+mvn clean install
+mvn spring-boot:run
+# 访问 http://localhost:8080/swagger-ui.html
+
+# 3. 启动前端服务
+cd frontend
+npm install
+npm run dev
+# 访问 http://localhost:5173
+```
+
+#### 3. 核心功能测试
+
+按以下顺序测试所有功能：
+
+**用户系统测试**
+- [ ] 注册新用户账号
+- [ ] 登录系统
+- [ ] 查看个人资料
+- [ ] 修改个人信息
+- [ ] 修改密码
+
+**音乐功能测试**
+- [ ] 上传音乐（应为 PENDING 状态）⚠️
+- [ ] 浏览音乐列表
+- [ ] 搜索音乐
+- [ ] 播放音乐
+- [ ] 创建歌单
+- [ ] 添加音乐到歌单
+
+**社交功能测试**
+- [ ] 评论音乐
+- [ ] 回复评论
+- [ ] 点赞音乐
+- [ ] 关注用户
+- [ ] 查看关注列表
+
+**管理员功能测试**（需要ADMIN角色）
+- [ ] 登录管理员账号
+- [ ] 查看仪表板统计
+- [ ] 搜索和管理用户
+- [ ] 启用/禁用用户
+- [ ] 分配角色（MUSICIAN, ADMIN）
+- [ ] 查看待审核音乐
+- [ ] 批准音乐（状态改为 APPROVED）
+- [ ] 拒绝音乐（状态改为 REJECTED）
+- [ ] 验证批准后的音乐在公开列表中可见
+
+#### 4. 创建测试管理员账号
+
+如果数据库中没有管理员账号，需要手动添加：
+
+```sql
+-- 方法 1: 通过 SQL 添加管理员角色
+INSERT INTO user_roles (user_id, role_id)
+SELECT 1, id FROM roles WHERE name = 'ROLE_ADMIN';
+
+-- 方法 2: 查看现有用户和角色
+SELECT u.id, u.username, u.email, r.name as role
+FROM users u
+LEFT JOIN user_roles ur ON u.id = ur.user_id
+LEFT JOIN roles r ON ur.role_id = r.id;
+```
+
+#### 5. 测试指南文档
+
+详细测试步骤请参考：
+- 📖 `TESTING_GUIDE.md` - 完整测试指南
+- 📖 `PHASE_5_IMPLEMENTATION_COMPLETE.md` - Phase 5 功能说明
+
+### ⚠️ 重要提醒
+
+**Phase 5 重大变更：**
+- 音乐上传现在默认为 **PENDING** 状态（需管理员审核）
+- 只有 **APPROVED** 状态的音乐才会在公开列表中显示
+- 测试时请确保创建管理员账号并审批音乐
+
 ## 下一步
 
-环境准备完成后，可以：
+### 选项 1：测试当前 MVP（推荐 ⭐⭐⭐⭐⭐）
 
-1. **启动 Docker 服务**
+环境准备完成后：
+
+1. **启动所有服务**
    ```bash
+   # 启动 Docker
    docker-compose up -d
+
+   # 启动后端（新终端）
+   cd backend && mvn spring-boot:run
+
+   # 启动前端（新终端）
+   cd frontend && npm run dev
    ```
 
-2. **初始化后端项目**
+2. **完成测试清单**
+   - 按上方测试清单逐项测试
+   - 记录发现的问题
+   - 验证所有核心功能
+
+3. **查看测试指南**
    ```bash
-   cd backend
-   mvn clean install
+   # 查看详细测试说明
+   cat TESTING_GUIDE.md
    ```
 
-3. **初始化前端项目**
-   ```bash
-   cd frontend
-   npm install
-   ```
+### 选项 2：继续开发 Phase 6（不推荐在未测试前）
 
-4. **开始开发** 🎉
+如果跳过测试直接开发：
+- ⚠️ 可能基于未验证的代码继续开发
+- ⚠️ 后期发现问题需要回头修复
+- ⚠️ 缺少真实数据环境进行新功能开发
+
+### 选项 3：查看下一阶段规划
+
+```bash
+# 查看 Phase 6 开发选项
+cat NEXT_PHASE_OPTIONS.md
+
+# 查看项目状态
+cat PROJECT_STATUS.MD
+```
 
 ---
 
-*文档版本：1.0.0*
+## 📊 当前项目状态
+
+**进度：** 100% MVP 完成 ✅
+- ✅ Phase 1: 项目初始化
+- ✅ Phase 2: 用户管理模块
+- ✅ Phase 3: 音乐管理模块
+- ✅ Phase 4: 社交互动模块
+- ✅ Phase 5: 后台管理模块
+
+**下一阶段：** Phase 6（待选择方向）
+
+推荐方向：
+1. 🔍 搜索与发现增强（提升用户体验）
+2. 🔔 通知与实时系统（提高用户留存）
+3. ⚡ 性能优化与缓存（为规模化做准备）
+
+详见 `NEXT_PHASE_OPTIONS.md` 📖
+
+---
+
+*文档版本：2.0.0*
 *创建日期：2026-02-20*
 *最后更新：2026-02-20*
+*项目状态：MVP 完成，进入测试阶段*
