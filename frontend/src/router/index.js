@@ -20,66 +20,103 @@ import { ElMessage } from 'element-plus'
  * - roles: Required user roles (array)
  */
 const routes = [
+  // Home
   {
     path: '/',
     name: 'Home',
     component: () => import('@/views/Home.vue'),
     meta: { title: 'Home' }
   },
+
+  // User Routes
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/user/Login.vue'),
+    component: () => import('@/views/User/Login.vue'),
     meta: { title: 'Login' }
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('@/views/user/Register.vue'),
+    component: () => import('@/views/User/Register.vue'),
     meta: { title: 'Register' }
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: () => import('@/views/user/Profile.vue'),
+    component: () => import('@/views/User/Profile.vue'),
     meta: { title: 'My Profile', requiresAuth: true }
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import('@/views/user/Settings.vue'),
+    component: () => import('@/views/User/Settings.vue'),
     meta: { title: 'Settings', requiresAuth: true }
+  },
+
+  // Music Routes
+  {
+    path: '/music',
+    name: 'MusicBrowse',
+    component: () => import('@/views/Music/Browse.vue'),
+    meta: { title: 'Browse Music' }
+  },
+  {
+    path: '/music/upload',
+    name: 'MusicUpload',
+    component: () => import('@/views/Music/Upload.vue'),
+    meta: { title: 'Upload Music', requiresAuth: true, roles: ['MUSICIAN', 'ADMIN'] }
+  },
+  {
+    path: '/music/my',
+    name: 'MyMusic',
+    component: () => import('@/views/Music/MyMusic.vue'),
+    meta: { title: 'My Music', requiresAuth: true, roles: ['MUSICIAN', 'ADMIN'] }
   },
   {
     path: '/music/:id',
     name: 'MusicDetail',
-    component: () => import('@/views/music/MusicDetail.vue'),
+    component: () => import('@/views/Music/MusicDetail.vue'),
     meta: { title: 'Music Detail' }
   },
+
+  // Playlist Routes
   {
-    path: '/upload',
-    name: 'Upload',
-    component: () => import('@/views/music/Upload.vue'),
-    meta: { title: 'Upload Music', requiresAuth: true, roles: ['MUSICIAN', 'ADMIN'] }
+    path: '/playlists',
+    name: 'PlaylistBrowse',
+    component: () => import('@/views/Playlist/Browse.vue'),
+    meta: { title: 'Browse Playlists' }
   },
   {
-    path: '/playlist/:id',
+    path: '/playlists/my',
+    name: 'MyPlaylists',
+    component: () => import('@/views/Playlist/MyPlaylists.vue'),
+    meta: { title: 'My Playlists', requiresAuth: true }
+  },
+  {
+    path: '/playlists/:id',
     name: 'PlaylistDetail',
-    component: () => import('@/views/playlist/PlaylistDetail.vue'),
+    component: () => import('@/views/Playlist/PlaylistDetail.vue'),
     meta: { title: 'Playlist' }
   },
+
+  // Genre Routes
   {
-    path: '/playlist/create',
-    name: 'CreatePlaylist',
-    component: () => import('@/views/playlist/Create.vue'),
-    meta: { title: 'Create Playlist', requiresAuth: true }
+    path: '/genres',
+    name: 'GenreBrowse',
+    component: () => import('@/views/Genre/Browse.vue'),
+    meta: { title: 'Browse Genres' }
   },
+
+  // Search
   {
     path: '/search',
     name: 'Search',
     component: () => import('@/views/Search.vue'),
     meta: { title: 'Search' }
   },
+
+  // Admin Routes
   {
     path: '/admin',
     name: 'AdminDashboard',
@@ -98,6 +135,8 @@ const routes = [
     component: () => import('@/views/admin/UserManage.vue'),
     meta: { title: 'User Management', requiresAuth: true, roles: ['ADMIN'] }
   },
+
+  // 404 Not Found
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',

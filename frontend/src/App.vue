@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view />
+    <AppHeader />
+    <main class="app-main">
+      <router-view />
+    </main>
+    <MusicPlayer />
   </div>
 </template>
 
@@ -16,6 +20,8 @@
 
 import { onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
+import AppHeader from '@/components/common/AppHeader.vue'
+import MusicPlayer from '@/components/Player/MusicPlayer.vue'
 
 const userStore = useUserStore()
 
@@ -35,5 +41,12 @@ onMounted(() => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #f5f7fa;
+}
+
+.app-main {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 80px; /* Space for music player */
 }
 </style>
