@@ -91,7 +91,7 @@
         <!-- Volume Control -->
         <div class="volume-control">
           <el-button
-            :icon="playerStore.isMuted ? Muted : Microphone"
+            :icon="playerStore.isMuted ? Mute : Microphone"
             circle
             text
             @click="playerStore.toggleMute"
@@ -173,7 +173,7 @@ import {
   RefreshLeft,
   RefreshRight,
   Microphone,
-  Muted,
+  Mute,
   List,
   Delete,
   View,
