@@ -10,7 +10,14 @@
 
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { login as loginApi, logout as logoutApi, getUserProfile } from '@/api/user'
+import {
+  register as registerApi,
+  login as loginApi,
+  logout as logoutApi,
+  getUserProfile,
+  updateProfile as updateProfileApi,
+  changePassword as changePasswordApi
+} from '@/api/user'
 import { ElMessage } from 'element-plus'
 
 export const useUserStore = defineStore('user', () => {
@@ -22,17 +29,49 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = computed(() => !!token.value)
   const userId = computed(() => userInfo.value?.id)
   const username = computed(() => userInfo.value?.username)
+  const email = computed(() => userInfo.value?.email)
   const avatar = computed(() => userInfo.value?.avatar)
-  const role = computed(() => userInfo.value?.role)
-  const isMusician = computed(() => role.value === 'MUSICIAN' || role.value === 'ADMIN')
-  const isAdmin = computed(() => role.value === 'ADMIN')
+  const nickname = computed(() => userInfo.value?.nickname || userInfo.value?.username)
+  const bio = computed(() => userInfo.value?.bio)
+  const roles = computed(() => userInfo.value?.roles || [])
+  const isMusician = computed(() => roles.value.includes('ROLE_MUSICIAN') || roles.value.includes('ROLE_ADMIN'))
+  const isAdmin = computed(() => roles.value.includes('ROLE_ADMIN'))
+  const followersCount = computed(() => userInfo.value?.followersCount || 0)
+  const followingCount = computed(() => userInfo.value?.followingCount || 0)
+  const musicCount = computed(() => userInfo.value?.musicCount || 0)
+  const playlistCount = computed(() => userInfo.value?.playlistCount || 0)
+
+  /**
+   * User registration action
+   *
+   * @param {Object} credentials - Registration credentials
+   * @param {string} credentials.username - Username
+   * @param {string} credentials.email - Email
+   * @param {string} credentials.password - Password
+   * @param {string} credentials.confirmPassword - Confirm password
+   * @param {string} credentials.nickname - Nickname (optional)
+   * @returns {Promise<boolean>} Registration success status
+   */
+  async function register(credentials) {
+    try {
+      const response = await registerApi(credentials)
+
+      ElMessage.success('Registration successful! Please login.')
+      return true
+    } catch (error) {
+      console.error('Registration failed:', error)
+      ElMessage.error(error.message || 'Registration failed')
+      return false
+    }
+  }
 
   /**
    * User login action
    *
    * @param {Object} credentials - Login credentials
-   * @param {string} credentials.username - Username or email
+   * @param {string} credentials.usernameOrEmail - Username or email
    * @param {string} credentials.password - Password
+   * @param {boolean} credentials.rememberMe - Remember me flag
    * @returns {Promise<boolean>} Login success status
    */
   async function login(credentials) {
@@ -46,10 +85,10 @@ export const useUserStore = defineStore('user', () => {
       localStorage.setItem('token', response.token)
       localStorage.setItem('userInfo', JSON.stringify(response.userInfo))
 
-      ElMessage.success('Login successful')
       return true
     } catch (error) {
       console.error('Login failed:', error)
+      ElMessage.error(error.message || 'Login failed')
       return false
     }
   }
@@ -87,6 +126,50 @@ export const useUserStore = defineStore('user', () => {
       localStorage.setItem('userInfo', JSON.stringify(data))
     } catch (error) {
       console.error('Failed to fetch user profile:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Update user profile
+   *
+   * @param {Object} data - Profile data to update
+   * @returns {Promise<boolean>} Update success status
+   */
+  async function updateProfile(data) {
+    try {
+      const response = await updateProfileApi(data)
+      userInfo.value = response
+      localStorage.setItem('userInfo', JSON.stringify(response))
+
+      ElMessage.success('Profile updated successfully')
+      return true
+    } catch (error) {
+      console.error('Failed to update profile:', error)
+      ElMessage.error(error.message || 'Failed to update profile')
+      return false
+    }
+  }
+
+  /**
+   * Change password
+   *
+   * @param {Object} data - Password change data
+   * @param {string} data.oldPassword - Old password
+   * @param {string} data.newPassword - New password
+   * @param {string} data.confirmPassword - Confirm password
+   * @returns {Promise<boolean>} Change success status
+   */
+  async function changePassword(data) {
+    try {
+      await changePasswordApi(data)
+
+      ElMessage.success('Password changed successfully')
+      return true
+    } catch (error) {
+      console.error('Failed to change password:', error)
+      ElMessage.error(error.message || 'Failed to change password')
+      return false
     }
   }
 
@@ -109,15 +192,25 @@ export const useUserStore = defineStore('user', () => {
     isLoggedIn,
     userId,
     username,
+    email,
     avatar,
-    role,
+    nickname,
+    bio,
+    roles,
     isMusician,
     isAdmin,
+    followersCount,
+    followingCount,
+    musicCount,
+    playlistCount,
 
     // Actions
+    register,
     login,
     logout,
     fetchUserProfile,
+    updateProfile,
+    changePassword,
     updateUserInfo
   }
 })
