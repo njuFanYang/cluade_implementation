@@ -183,12 +183,17 @@ router.beforeEach((to, from, next) => {
       query: { redirect: to.fullPath }
     })
   } else if (to.meta.roles && to.meta.roles.length > 0) {
-    // Check user role
-    const userRole = userInfo.role
-    if (to.meta.roles.includes(userRole)) {
+    // Check user roles (roles is an array like ['ROLE_USER', 'ROLE_MUSICIAN'])
+    const userRoles = userInfo.roles || []
+    const hasRequiredRole = to.meta.roles.some(requiredRole => {
+      // Support both 'ADMIN' and 'ROLE_ADMIN' format
+      return userRoles.includes(requiredRole) || userRoles.includes(`ROLE_${requiredRole}`)
+    })
+
+    if (hasRequiredRole) {
       next()
     } else {
-      ElMessage.error('Access denied')
+      ElMessage.error('Access denied. Insufficient permissions.')
       next('/')
     }
   } else {

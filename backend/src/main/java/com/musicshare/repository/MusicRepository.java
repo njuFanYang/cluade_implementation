@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,4 +185,20 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
      * @return Count of music
      */
     long countByAlbumId(Long albumId);
+
+    /**
+     * Count music created after a specific date
+     *
+     * @param date Date to count from
+     * @return Number of music created after date
+     */
+    long countByCreatedAtAfter(LocalDateTime date);
+
+    /**
+     * Count music by status
+     *
+     * @param status Music status
+     * @return Number of music with given status
+     */
+    long countByStatus(MusicStatus status);
 }

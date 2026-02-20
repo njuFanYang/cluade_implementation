@@ -98,7 +98,7 @@ public class MusicServiceImpl implements MusicService {
             music.setReleaseDate(request.getReleaseDate());
             music.setUploaderId(uploaderId);
             music.setIsPublic(request.getIsPublic() != null ? request.getIsPublic() : true);
-            music.setStatus(MusicStatus.APPROVED); // Auto-approve for now
+            music.setStatus(MusicStatus.PENDING); // Requires admin approval
 
             // Save music entity
             music = musicRepository.save(music);

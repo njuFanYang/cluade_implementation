@@ -90,6 +90,10 @@ public enum ErrorCode {
     AUDIT_ALREADY_PROCESSED(5002, "Audit record already processed"),
     REPORT_NOT_FOUND(5003, "Report not found"),
     INVALID_AUDIT_STATUS(5004, "Invalid audit status"),
+    CANNOT_DISABLE_ADMIN(5005, "Cannot disable admin user"),
+    CANNOT_DELETE_ADMIN(5006, "Cannot delete admin user"),
+    ROLE_NOT_FOUND(5007, "Role not found"),
+    CANNOT_REMOVE_LAST_ADMIN(5008, "Cannot remove the last admin role"),
 
     // File errors (6000-6999)
     FILE_UPLOAD_FAILED(6001, "File upload failed"),
