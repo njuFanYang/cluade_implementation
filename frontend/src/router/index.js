@@ -136,6 +136,14 @@ const routes = [
     meta: { title: 'User Management', requiresAuth: true, roles: ['ADMIN'] }
   },
 
+  // Test Mock Data (Development Only)
+  {
+    path: '/test/mock-data',
+    name: 'TestMockData',
+    component: () => import('@/views/TestMockData.vue'),
+    meta: { title: 'Test Mock Data' }
+  },
+
   // 404 Not Found
   {
     path: '/:pathMatch(.*)*',
