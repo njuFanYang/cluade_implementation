@@ -1,8 +1,8 @@
 # 🎵 MusicShare 项目进度状态
 
 **最后更新：** 2026-02-20
-**Git Commit：** 9f42802
-**总体进度：** 50% (Phase 1 和 Phase 2 完成)
+**Git Commit：** (待提交 Phase 3.1)
+**总体进度：** 65% (Phase 1, Phase 2, 和 Phase 3.1 完成)
 
 ---
 
@@ -151,11 +151,97 @@ frontend/
 
 ---
 
+### Phase 3.1: 音乐内容管理模块后端 ✅ 100%
+
+**完成内容：**
+- ✅ 数据库表设计（5 个核心表 + 初始数据）
+- ✅ Genre 实体类和 Repository（音乐类型，50 个初始类型）
+- ✅ Album 实体类和 Repository（专辑管理）
+- ✅ Music 实体类和 Repository（音乐主表，30+ 字段）
+- ✅ Playlist + PlaylistMusic 实体类和 Repository（歌单管理）
+- ✅ FileStorageService（文件上传、元数据提取、流式传输）
+- ✅ MusicService（上传、CRUD、搜索、播放统计）
+- ✅ PlaylistService（创建、管理、添加/移除歌曲、排序）
+- ✅ GenreService（类型查询）
+- ✅ MusicController（13 个 API 接口）
+- ✅ PlaylistController（11 个 API 接口）
+- ✅ GenreController（3 个 API 接口）
+- ✅ DTO 类（7 个 Request + 6 个 Response）
+- ✅ 错误码扩展（新增 9 个错误码）
+
+**关键文件：**
+```
+backend/src/main/java/com/musicshare/
+├── entity/
+│   ├── Music.java                      # 音乐实体（30+ 字段）
+│   ├── Genre.java                      # 音乐类型实体
+│   ├── Album.java                      # 专辑实体
+│   ├── Playlist.java                   # 歌单实体
+│   ├── PlaylistMusic.java              # 歌单-音乐关联实体
+│   └── MusicStatus.java                # 音乐状态枚举
+├── repository/
+│   ├── MusicRepository.java            # 音乐仓库（15+ 查询方法）
+│   ├── GenreRepository.java            # 类型仓库
+│   ├── AlbumRepository.java            # 专辑仓库
+│   ├── PlaylistRepository.java         # 歌单仓库
+│   └── PlaylistMusicRepository.java    # 关联仓库
+├── service/
+│   ├── MusicService.java               # 音乐服务接口
+│   ├── PlaylistService.java            # 歌单服务接口
+│   ├── GenreService.java               # 类型服务接口
+│   ├── FileStorageService.java         # 文件存储服务接口
+│   └── impl/                           # 服务实现（4 个）
+├── controller/
+│   ├── MusicController.java            # 音乐控制器（13 接口）
+│   ├── PlaylistController.java         # 歌单控制器（11 接口）
+│   └── GenreController.java            # 类型控制器（3 接口）
+└── dto/                                # DTO 类（13 个）
+    ├── request/
+    │   ├── UploadMusicRequest.java     # 上传音乐请求
+    │   ├── UpdateMusicRequest.java     # 更新音乐请求
+    │   ├── CreatePlaylistRequest.java  # 创建歌单请求
+    │   └── UpdatePlaylistRequest.java  # 更新歌单请求
+    └── response/
+        ├── MusicResponse.java          # 音乐响应
+        ├── MusicDetailResponse.java    # 音乐详情响应
+        ├── PlaylistResponse.java       # 歌单响应
+        ├── PlaylistDetailResponse.java # 歌单详情响应
+        └── GenreResponse.java          # 类型响应
+```
+
+**数据库表结构：**
+```
+backend/src/main/resources/db/migration/
+├── V3__create_music_tables.sql         # 创建 5 个核心表
+└── V4__insert_initial_genres.sql       # 插入 50 个音乐类型
+```
+
+**技术亮点：**
+- 文件存储：本地文件系统，支持年/月子目录
+- 音频处理：JAudiotagger 提取元数据（标题、艺术家、时长等）
+- 流式传输：支持 HTTP Range 请求（音频跳转）
+- 权限控制：基于角色和所有权的访问控制
+- 搜索优化：全文搜索、热门排序、分页支持
+- 事务管理：@Transactional 保证数据一致性
+
+**Maven 依赖：**
+- JAudiotagger 3.0.1（音频元数据提取）
+
+**API 接口总览：**
+- 音乐管理：上传、详情、更新、删除、我的音乐
+- 音乐查询：搜索、热门、最新、按类型、按上传者、全部公开
+- 音乐播放：流式播放、记录播放次数
+- 歌单管理：创建、详情、更新、删除、我的歌单
+- 歌单查询：公开歌单、搜索、热门
+- 歌单音乐：添加、移除、重新排序
+- 类型管理：全部类型、热门类型、类型详情
+
+---
+
 ## ⏳ 待开发的阶段
 
-### Phase 3: 音乐内容管理模块（预计 4 天）
-- [ ] 后端：音乐上传、播放、歌单管理
-- [ ] 前端：播放器组件、上传页面
+### Phase 3.2: 音乐内容管理模块前端（预计 2-3 天）
+- [ ] 前端：播放器组件、上传页面、歌单管理
 
 ### Phase 4: 社交互动模块（预计 3 天）
 - [ ] 后端：评论、点赞、关注功能
@@ -233,16 +319,18 @@ npm run dev
 
 ## 🎯 当前任务
 
-**下一个任务：** Phase 3.1 - 实现音乐内容管理模块后端
+**已完成：** Phase 3.1 - 音乐内容管理模块后端 ✅
+
+**下一个任务：** Phase 3.2 - 实现音乐内容管理模块前端
 
 包括：
-1. 数据库表设计（Music, Genre, Playlist, PlaylistMusic 等）
-2. 实体类实现
-3. Repository 层
-4. Service 层（音乐上传、播放、歌单管理）
-5. 文件存储服务（本地或 OSS）
-6. Controller 层（RESTful API）
-7. 音频文件处理
+1. 音乐播放器组件（全局播放器）
+2. 音乐上传页面
+3. 音乐列表和详情页面
+4. 歌单管理页面
+5. 音乐搜索功能
+6. API 层实现
+7. Store 状态管理（音乐、播放器、歌单）
 
 ---
 

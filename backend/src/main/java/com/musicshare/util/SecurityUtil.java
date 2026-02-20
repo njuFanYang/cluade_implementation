@@ -76,6 +76,41 @@ public class SecurityUtil {
     }
 
     /**
+     * Get current authenticated user ID
+     *
+     * <p>Retrieves the user ID of the currently authenticated user from the
+     * Spring Security context. Returns null if no user is authenticated.
+     *
+     * @return User ID of authenticated user, or null if not authenticated
+     */
+    public static Long getCurrentUserId() {
+        return getAuthentication()
+                .map(auth -> {
+                    Object principal = auth.getPrincipal();
+                    if (principal instanceof org.springframework.security.core.userdetails.User) {
+                        // Try to parse username as ID if it's a numeric string
+                        try {
+                            return Long.parseLong(((org.springframework.security.core.userdetails.User) principal).getUsername());
+                        } catch (NumberFormatException e) {
+                            return null;
+                        }
+                    }
+                    // If principal has a getId() method through reflection or custom UserDetails
+                    try {
+                        java.lang.reflect.Method method = principal.getClass().getMethod("getId");
+                        Object result = method.invoke(principal);
+                        if (result instanceof Long) {
+                            return (Long) result;
+                        }
+                    } catch (Exception e) {
+                        // Method not found or invocation failed
+                    }
+                    return null;
+                })
+                .orElse(null);
+    }
+
+    /**
      * Check if the given username matches the current authenticated user
      *
      * <p>Compares the provided username with the currently authenticated user's

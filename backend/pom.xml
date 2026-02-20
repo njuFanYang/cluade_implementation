@@ -121,6 +121,13 @@
             <version>5.8.25</version>
         </dependency>
 
+        <!-- JAudiotagger (Audio metadata extraction) -->
+        <dependency>
+            <groupId>net.jthink</groupId>
+            <artifactId>jaudiotagger</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

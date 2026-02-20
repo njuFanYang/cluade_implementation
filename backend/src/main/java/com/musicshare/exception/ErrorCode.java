@@ -58,6 +58,10 @@ public enum ErrorCode {
     MUSIC_ALREADY_EXISTS(2005, "Music already exists"),
     MUSIC_NOT_APPROVED(2006, "Music not approved yet"),
     MUSIC_PROCESSING(2007, "Music is being processed"),
+    MUSIC_PERMISSION_DENIED(2008, "Permission denied to access this music"),
+    ALBUM_NOT_FOUND(2009, "Album not found"),
+    GENRE_NOT_FOUND(2010, "Genre not found"),
+    MUSIC_METADATA_EXTRACTION_FAILED(2011, "Failed to extract music metadata"),
 
     // Playlist errors (3000-3999)
     PLAYLIST_NOT_FOUND(3001, "Playlist not found"),
@@ -65,6 +69,8 @@ public enum ErrorCode {
     MUSIC_ALREADY_IN_PLAYLIST(3003, "Music already in playlist"),
     MUSIC_NOT_IN_PLAYLIST(3004, "Music not in playlist"),
     CANNOT_MODIFY_PLAYLIST(3005, "Cannot modify this playlist"),
+    PLAYLIST_PERMISSION_DENIED(3006, "Permission denied to access this playlist"),
+    PLAYLIST_MUSIC_LIMIT_EXCEEDED(3007, "Playlist has reached maximum music limit"),
 
     // Social interaction errors (4000-4999)
     COMMENT_NOT_FOUND(4001, "Comment not found"),
