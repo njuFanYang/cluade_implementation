@@ -1,0 +1,16 @@
+{
+    "accounts":[
+        {
+            "userName": "admin",
+            "password": "admin123",
+            "email": "admin@example.com",
+            "nickname": "Administrator"
+        },
+        {
+            "userName": "test1",
+            "password": "test123",
+            "email": "test1@example.com",
+            "nickname": "Test User 1"
+        }
+    ]
+}

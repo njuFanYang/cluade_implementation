@@ -120,6 +120,36 @@ check_prereqs() {
     [ $failed -eq 0 ] || { log_error "请安装缺失工具后重试"; exit 1; }
 }
 
+# ── 复制种子音乐文件 ───────────────────────────────────────────────────────────
+# 将 test/music/ 里的 MP3 复制到 backend/music/seed/（后端运行时读取该路径）
+copy_seed_music() {
+    local src="$SCRIPT_DIR/test/music"
+    local dst="$BACKEND_DIR/music/seed"
+    if [ ! -d "$src" ]; then
+        log_warn "未找到 test/music/ 目录，跳过种子音乐复制"
+        return 0
+    fi
+    mkdir -p "$dst"
+    # 按固定名称复制，与 SQL 中的 file_path 对应
+    local -A map=(
+        ["周杰伦 - 晴天(1).mp3"]="qingtian.mp3"
+        ["周杰伦 - 花海(1).mp3"]="huahai.mp3"
+        ["曹雨航,朝歌夜弦+-+江湖之间.mp3"]="jianghu.mp3"
+        ["王大毛+-+去年夏天.mp3"]="qunian_xiatian.mp3"
+    )
+    local copied=0
+    for orig in "${!map[@]}"; do
+        local target="${map[$orig]}"
+        if [ -f "$src/$orig" ] && [ ! -f "$dst/$target" ]; then
+            cp "$src/$orig" "$dst/$target"
+            log_info "已复制: $orig → music/seed/$target"
+            copied=$((copied + 1))
+        fi
+    done
+    [ $copied -gt 0 ] && log_info "种子音乐复制完成（共 $copied 个文件）" \
+                      || log_info "种子音乐已存在，无需重复复制"
+}
+
 # ── Docker 服务 ───────────────────────────────────────────────────────────────
 start_docker() {
     log_step "启动 Docker 基础服务（MySQL + Redis）"
@@ -318,6 +348,7 @@ case "$MODE" in
     status) show_status ;;
     dev)
         check_prereqs
+        copy_seed_music
         start_docker
         start_backend_dev
         start_frontend_dev
@@ -325,6 +356,7 @@ case "$MODE" in
         ;;
     prod)
         check_prereqs
+        copy_seed_music
         start_docker
         start_backend_prod
         build_frontend_prod

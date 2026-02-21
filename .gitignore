@@ -31,10 +31,14 @@ frontend/.nuxt/
 frontend/.output/
 frontend/.cache/
 
-# Uploads
+# Uploads & runtime music files
 uploads/
 music_files/
 cover_images/
+backend/music/
+
+# Test MP3 files (large binaries — keep locally in test/music/, not in git)
+test/music/
 
 # Docker volumes
 mysql_data/
