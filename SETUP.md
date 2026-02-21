@@ -11,7 +11,21 @@
 
 ---
 
-## 本地开发
+## 一键部署（推荐）
+
+```bash
+./deploy.sh dev     # 开发模式：启动 Docker + 后端 + 前端
+./deploy.sh prod    # 生产模式：构建打包后运行
+./deploy.sh stop    # 停止所有服务
+./deploy.sh status  # 查看运行状态
+./deploy.sh test    # 运行所有自动化测试
+```
+
+> **注意**：脚本需在 Git Bash 或 WSL 中运行，且 Docker Desktop 必须已启动。
+
+---
+
+## 手动分步启动
 
 ### 1. 启动基础服务（MySQL + Redis）
 
@@ -65,15 +79,22 @@ SELECT 1, id FROM roles WHERE name = 'ROLE_ADMIN';
 
 ## 运行测试
 
-### 后端（JUnit + Mockito）
+### 一键运行（推荐）
+
+```bash
+./deploy.sh test
+# 自动运行后端（158个）+ 前端（57个）全部单元测试
+```
+
+### 单独运行后端（JUnit + Mockito）
 
 ```bash
 cd backend
 mvn test
-# 11 个测试类，158 个测试用例，全部通过
+# 11 个测试类，158 个测试用例
 ```
 
-### 前端（Vitest）
+### 单独运行前端（Vitest）
 
 ```bash
 cd frontend
