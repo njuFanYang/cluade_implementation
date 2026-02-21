@@ -266,8 +266,8 @@ public class AdminServiceImpl implements AdminService {
                 .locked(user.getLocked())
                 .lastLoginIp(user.getLastLoginIp())
                 .lastLoginTime(user.getLastLoginTime())
-                .musicCount(musicCount)
-                .followersCount(followersCount)
+                .musicCount((int) musicCount)
+                .followersCount((int) followersCount)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
@@ -277,23 +277,6 @@ public class AdminServiceImpl implements AdminService {
      * Convert Music to MusicResponse
      */
     private MusicResponse convertToMusicResponse(Music music) {
-        return MusicResponse.builder()
-                .id(music.getId())
-                .title(music.getTitle())
-                .artist(music.getArtist())
-                .album(music.getAlbum() != null ? music.getAlbum().getName() : null)
-                .genreId(music.getGenreId())
-                .duration(music.getDuration())
-                .filePath(music.getFilePath())
-                .coverImage(music.getCoverImage())
-                .isPublic(music.getIsPublic())
-                .status(music.getStatus().name())
-                .playCount(music.getPlayCount())
-                .likeCount(music.getLikeCount())
-                .uploaderId(music.getUploader() != null ? music.getUploader().getId() : null)
-                .uploaderName(music.getUploader() != null ? music.getUploader().getUsername() : null)
-                .createdAt(music.getCreatedAt())
-                .updatedAt(music.getUpdatedAt())
-                .build();
+        return MusicResponse.fromEntity(music);
     }
 }

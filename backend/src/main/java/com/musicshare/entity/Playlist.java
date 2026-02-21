@@ -65,7 +65,7 @@ public class Playlist {
     /**
      * Creator user ID
      */
-    @Column(nullable = false)
+    @Column(name = "creator_id", nullable = false)
     @NotNull(message = "Creator ID is required")
     private Long creatorId;
 

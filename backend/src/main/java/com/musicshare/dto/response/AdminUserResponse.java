@@ -37,13 +37,4 @@ public class AdminUserResponse extends UserResponse {
      */
     private LocalDateTime lastLoginTime;
 
-    /**
-     * Number of music uploaded by this user
-     */
-    private Long musicCount;
-
-    /**
-     * Number of followers
-     */
-    private Long followersCount;
 }

@@ -4,8 +4,6 @@ import com.musicshare.dto.response.ApiResponse;
 import com.musicshare.dto.response.FollowStatsResponse;
 import com.musicshare.dto.response.UserResponse;
 import com.musicshare.service.FollowService;
-import com.musicshare.service.UserService;
-import com.musicshare.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
 
     private final FollowService followService;
-    private final UserService userService;
 
     /**
      * Follow a user
@@ -50,15 +47,13 @@ public class FollowController {
             security = @SecurityRequirement(name = "JWT"))
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Void>> follow(@PathVariable Long userId) {
-        String username = SecurityUtil.getCurrentUsername();
-        Long followerId = userService.getUserProfile(username).getId();
-        log.info("Follow request from user: {} (ID: {}) to user: {}", username, followerId, userId);
+        log.info("Follow request to user: {}", userId);
 
-        followService.follow(followerId, userId);
+        followService.follow(userId);
 
         log.info("Follow successful");
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(null, "Followed successfully"));
+                .body(ApiResponse.success("Followed successfully", null));
     }
 
     /**
@@ -73,14 +68,12 @@ public class FollowController {
             security = @SecurityRequirement(name = "JWT"))
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Void>> unfollow(@PathVariable Long userId) {
-        String username = SecurityUtil.getCurrentUsername();
-        Long followerId = userService.getUserProfile(username).getId();
-        log.info("Unfollow request from user: {} (ID: {}) to user: {}", username, followerId, userId);
+        log.info("Unfollow request to user: {}", userId);
 
-        followService.unfollow(followerId, userId);
+        followService.unfollow(userId);
 
         log.info("Unfollow successful");
-        return ResponseEntity.ok(ApiResponse.success(null, "Unfollowed successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Unfollowed successfully", null));
     }
 
     /**
@@ -95,11 +88,9 @@ public class FollowController {
             security = @SecurityRequirement(name = "JWT"))
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Boolean>> isFollowing(@PathVariable Long userId) {
-        String username = SecurityUtil.getCurrentUsername();
-        Long followerId = userService.getUserProfile(username).getId();
-        log.debug("Check following status from user: {} to user: {}", followerId, userId);
+        log.debug("Check following status to user: {}", userId);
 
-        boolean isFollowing = followService.isFollowing(followerId, userId);
+        boolean isFollowing = followService.isFollowing(userId);
 
         return ResponseEntity.ok(ApiResponse.success(isFollowing));
     }

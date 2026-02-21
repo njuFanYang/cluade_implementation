@@ -72,7 +72,7 @@ public class MusicController {
 
         log.info("Music uploaded successfully: {}", response.getId());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response, "Music uploaded successfully"));
+                .body(ApiResponse.success("Music uploaded successfully", response));
     }
 
     /**
@@ -121,7 +121,7 @@ public class MusicController {
         MusicResponse response = musicService.updateMusic(id, request, userId);
 
         log.info("Music updated successfully: {}", id);
-        return ResponseEntity.ok(ApiResponse.success(response, "Music updated successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Music updated successfully", response));
     }
 
     /**
@@ -143,7 +143,7 @@ public class MusicController {
         musicService.deleteMusic(id, userId);
 
         log.info("Music deleted successfully: {}", id);
-        return ResponseEntity.ok(ApiResponse.success(null, "Music deleted successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Music deleted successfully", null));
     }
 
     /**
@@ -344,7 +344,7 @@ public class MusicController {
 
         musicService.incrementPlayCount(id);
 
-        return ResponseEntity.ok(ApiResponse.success(null, "Play recorded"));
+        return ResponseEntity.ok(ApiResponse.success("Play recorded", null));
     }
 
     /**

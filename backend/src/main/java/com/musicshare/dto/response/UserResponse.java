@@ -5,6 +5,7 @@ import com.musicshare.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  * @since 2026-02-20
  */
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {

@@ -196,12 +196,7 @@ public class CommentServiceImpl implements CommentService {
                 }
             }
             case PLAYLIST -> {
-                Playlist playlist = playlistRepository.findById(targetId).orElse(null);
-                if (playlist != null) {
-                    int newCount = Math.max(0, playlist.getCommentCount() + delta);
-                    playlist.setCommentCount(newCount);
-                    playlistRepository.save(playlist);
-                }
+                // Playlist entity does not track comment count
             }
         }
     }

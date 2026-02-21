@@ -1,5 +1,7 @@
 package com.musicshare.service.impl;
 
+import com.musicshare.dto.response.FollowStatsResponse;
+import com.musicshare.dto.response.UserResponse;
 import com.musicshare.entity.Follow;
 import com.musicshare.entity.User;
 import com.musicshare.exception.BusinessException;
@@ -90,14 +92,22 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Follow> getFollowers(Long userId, Pageable pageable) {
-        return followRepository.findFollowersByFollowingId(userId, pageable);
+    public Page<UserResponse> getFollowers(Long userId, Pageable pageable) {
+        return followRepository.findFollowersByFollowingId(userId, pageable)
+                .map(follow -> {
+                    User user = userRepository.findById(follow.getFollowerId()).orElse(null);
+                    return user != null ? UserResponse.fromEntity(user) : null;
+                });
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Follow> getFollowing(Long userId, Pageable pageable) {
-        return followRepository.findFollowingByFollowerId(userId, pageable);
+    public Page<UserResponse> getFollowing(Long userId, Pageable pageable) {
+        return followRepository.findFollowingByFollowerId(userId, pageable)
+                .map(follow -> {
+                    User user = userRepository.findById(follow.getFollowingId()).orElse(null);
+                    return user != null ? UserResponse.fromEntity(user) : null;
+                });
     }
 
     @Override
@@ -112,6 +122,14 @@ public class FollowServiceImpl implements FollowService {
         return followRepository.countByFollowerId(userId);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public FollowStatsResponse getFollowStats(Long userId) {
+        long followersCount = followRepository.countByFollowingId(userId);
+        long followingCount = followRepository.countByFollowerId(userId);
+        return new FollowStatsResponse(userId, followersCount, followingCount);
+    }
+
     private void updateFollowCounts(Long followerId, Long followingId, int delta) {
         // Update follower's following count
         userRepository.findById(followerId).ifPresent(user -> {
@@ -122,8 +140,8 @@ public class FollowServiceImpl implements FollowService {
 
         // Update following's follower count
         userRepository.findById(followingId).ifPresent(user -> {
-            int newCount = Math.max(0, user.getFollowerCount() + delta);
-            user.setFollowerCount(newCount);
+            int newCount = Math.max(0, user.getFollowersCount() + delta);
+            user.setFollowersCount(newCount);
             userRepository.save(user);
         });
     }

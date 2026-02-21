@@ -67,7 +67,7 @@ public class Music {
     /**
      * Album ID (optional)
      */
-    @Column
+    @Column(name = "album_id")
     private Long albumId;
 
     /**
@@ -80,7 +80,7 @@ public class Music {
     /**
      * Genre ID
      */
-    @Column(nullable = false)
+    @Column(name = "genre_id", nullable = false)
     @NotNull(message = "Genre is required")
     private Long genreId;
 
@@ -155,7 +155,7 @@ public class Music {
     /**
      * Uploader user ID
      */
-    @Column(nullable = false)
+    @Column(name = "uploader_id", nullable = false)
     @NotNull(message = "Uploader ID is required")
     private Long uploaderId;
 

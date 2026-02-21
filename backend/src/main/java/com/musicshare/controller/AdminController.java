@@ -120,7 +120,7 @@ public class AdminController {
 
         log.info("Update user status request for userId: {}", id);
         adminService.updateUserStatus(id, request);
-        return ResponseEntity.ok(ApiResponse.success(null, "User status updated successfully"));
+        return ResponseEntity.ok(ApiResponse.success("User status updated successfully", null));
     }
 
     /**
@@ -140,7 +140,7 @@ public class AdminController {
                 request.getUserId(), request.getRoleName(), request.getAction());
 
         adminService.manageUserRole(request);
-        return ResponseEntity.ok(ApiResponse.success(null, "User role updated successfully"));
+        return ResponseEntity.ok(ApiResponse.success("User role updated successfully", null));
     }
 
     /**
@@ -158,7 +158,7 @@ public class AdminController {
 
         log.info("Delete user request for userId: {}", id);
         adminService.deleteUser(id);
-        return ResponseEntity.ok(ApiResponse.success(null, "User deleted successfully"));
+        return ResponseEntity.ok(ApiResponse.success("User deleted successfully", null));
     }
 
     /**
@@ -224,7 +224,7 @@ public class AdminController {
 
         log.info("Approve music request for musicId: {}", id);
         adminService.approveMusic(id);
-        return ResponseEntity.ok(ApiResponse.success(null, "Music approved successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Music approved successfully", null));
     }
 
     /**
@@ -244,6 +244,6 @@ public class AdminController {
 
         log.info("Reject music request for musicId: {}, reason: {}", id, reason);
         adminService.rejectMusic(id, reason);
-        return ResponseEntity.ok(ApiResponse.success(null, "Music rejected successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Music rejected successfully", null));
     }
 }

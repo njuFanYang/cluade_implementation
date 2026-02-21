@@ -45,7 +45,7 @@ public class PlaylistMusic {
     /**
      * Playlist ID
      */
-    @Column(nullable = false)
+    @Column(name = "playlist_id", nullable = false)
     @NotNull(message = "Playlist ID is required")
     private Long playlistId;
 
@@ -59,7 +59,7 @@ public class PlaylistMusic {
     /**
      * Music ID
      */
-    @Column(nullable = false)
+    @Column(name = "music_id", nullable = false)
     @NotNull(message = "Music ID is required")
     private Long musicId;
 

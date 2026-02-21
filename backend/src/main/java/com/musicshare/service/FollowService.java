@@ -1,5 +1,7 @@
 package com.musicshare.service;
 
+import com.musicshare.dto.response.FollowStatsResponse;
+import com.musicshare.dto.response.UserResponse;
 import com.musicshare.entity.Follow;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,18 +43,18 @@ public interface FollowService {
      *
      * @param userId User ID
      * @param pageable Pagination info
-     * @return Page of followers
+     * @return Page of follower UserResponses
      */
-    Page<Follow> getFollowers(Long userId, Pageable pageable);
+    Page<UserResponse> getFollowers(Long userId, Pageable pageable);
 
     /**
      * Get users that a user is following
      *
      * @param userId User ID
      * @param pageable Pagination info
-     * @return Page of following users
+     * @return Page of following UserResponses
      */
-    Page<Follow> getFollowing(Long userId, Pageable pageable);
+    Page<UserResponse> getFollowing(Long userId, Pageable pageable);
 
     /**
      * Get follower count
@@ -69,4 +71,12 @@ public interface FollowService {
      * @return Following count
      */
     long getFollowingCount(Long userId);
+
+    /**
+     * Get follow statistics for a user
+     *
+     * @param userId User ID
+     * @return Follow statistics
+     */
+    FollowStatsResponse getFollowStats(Long userId);
 }

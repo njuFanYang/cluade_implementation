@@ -66,7 +66,7 @@ public class PlaylistController {
 
         log.info("Playlist created successfully: {}", response.getId());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response, "Playlist created successfully"));
+                .body(ApiResponse.success("Playlist created successfully", response));
     }
 
     /**
@@ -115,7 +115,7 @@ public class PlaylistController {
         PlaylistResponse response = playlistService.updatePlaylist(id, request, userId);
 
         log.info("Playlist updated successfully: {}", id);
-        return ResponseEntity.ok(ApiResponse.success(response, "Playlist updated successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Playlist updated successfully", response));
     }
 
     /**
@@ -137,7 +137,7 @@ public class PlaylistController {
         playlistService.deletePlaylist(id, userId);
 
         log.info("Playlist deleted successfully: {}", id);
-        return ResponseEntity.ok(ApiResponse.success(null, "Playlist deleted successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Playlist deleted successfully", null));
     }
 
     /**
@@ -257,7 +257,7 @@ public class PlaylistController {
         playlistService.addMusicToPlaylist(playlistId, musicId, userId);
 
         log.info("Music added to playlist successfully");
-        return ResponseEntity.ok(ApiResponse.success(null, "Music added to playlist"));
+        return ResponseEntity.ok(ApiResponse.success("Music added to playlist", null));
     }
 
     /**
@@ -283,7 +283,7 @@ public class PlaylistController {
         playlistService.removeMusicFromPlaylist(playlistId, musicId, userId);
 
         log.info("Music removed from playlist successfully");
-        return ResponseEntity.ok(ApiResponse.success(null, "Music removed from playlist"));
+        return ResponseEntity.ok(ApiResponse.success("Music removed from playlist", null));
     }
 
     /**
@@ -309,6 +309,6 @@ public class PlaylistController {
         playlistService.reorderPlaylistMusic(playlistId, musicIds, userId);
 
         log.info("Playlist reordered successfully");
-        return ResponseEntity.ok(ApiResponse.success(null, "Playlist reordered successfully"));
+        return ResponseEntity.ok(ApiResponse.success("Playlist reordered successfully", null));
     }
 }
