@@ -39,3 +39,6 @@ cover_images/
 # Docker volumes
 mysql_data/
 redis_data/
+
+# Cladue
+.cladue/
