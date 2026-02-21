@@ -1,39 +1,41 @@
-# Setup & Deployment Guide
+# 环境搭建与部署指南
 
-## Prerequisites
+## 前置要求
 
-| Tool | Version | Check |
-|------|---------|-------|
+| 工具 | 版本 | 验证命令 |
+|------|------|---------|
 | JDK | 17+ | `java -version` |
 | Maven | 3.6+ | `mvn -version` |
 | Node.js | 18+ | `node -v` |
-| Docker | any | `docker -v` |
+| Docker | 任意 | `docker -v` |
 
 ---
 
-## Local Development
+## 本地开发
 
-### 1. Start Infrastructure (MySQL + Redis)
+### 1. 启动基础服务（MySQL + Redis）
 
 ```bash
 docker-compose up -d
 ```
 
-- MySQL: `localhost:3306` (user: `musicshare`, password: `musicshare123`, db: `musicshare`)
-- Redis: `localhost:6379`
-- phpMyAdmin: http://localhost:8080 (root / root123456)
+| 服务 | 地址 | 账号信息 |
+|------|------|---------|
+| MySQL | `localhost:3306` | 用户: `musicshare` / 密码: `musicshare123` / 库: `musicshare` |
+| Redis | `localhost:6379` | 无密码 |
+| phpMyAdmin | http://localhost:8080 | root / root123456 |
 
-### 2. Start Backend
+### 2. 启动后端
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-- API: http://localhost:8081
-- Swagger UI: http://localhost:8081/swagger-ui.html
+- API 地址：http://localhost:8081
+- Swagger 文档：http://localhost:8081/swagger-ui.html
 
-### 3. Start Frontend
+### 3. 启动前端
 
 ```bash
 cd frontend
@@ -41,57 +43,59 @@ npm install
 npm run dev
 ```
 
-- App: http://localhost:5173
+- 前端地址：http://localhost:5173
 
 ---
 
-## Create Admin User
+## 创建管理员账号
 
-After starting the app, register a normal user then promote via SQL:
+先在前端注册普通用户，再通过 SQL 授予管理员角色：
+
+```bash
+docker exec -it musicshare-mysql mysql -u musicshare -pmusicshare123 musicshare
+```
 
 ```sql
-docker exec -it musicshare-mysql mysql -u musicshare -pmusicshare123 musicshare
-
--- Replace 1 with your user's ID
+-- 将用户 ID 改为实际用户 ID
 INSERT INTO user_roles (user_id, role_id)
 SELECT 1, id FROM roles WHERE name = 'ROLE_ADMIN';
 ```
 
 ---
 
-## Running Tests
+## 运行测试
 
-### Backend (JUnit + Mockito)
+### 后端（JUnit + Mockito）
 
 ```bash
 cd backend
 mvn test
-# 158 tests across 11 test classes
+# 11 个测试类，158 个测试用例，全部通过
 ```
 
-### Frontend (Vitest)
+### 前端（Vitest）
 
 ```bash
 cd frontend
-npm test              # run once
-npm run test:watch    # watch mode
-npm run test:coverage # with coverage report
+npm test                  # 单次运行（57 个测试）
+npm run test:watch        # 监听模式
+npm run test:coverage     # 生成覆盖率报告
 ```
 
-### E2E (Playwright) — requires running app
+### E2E 端到端测试（Playwright）— 需先启动本地服务
 
 ```bash
 cd frontend
-npx playwright install chromium   # first time only
-npm run test:e2e
-npm run test:e2e:ui               # interactive UI mode
+npx playwright install chromium   # 首次使用需安装浏览器
+npm run test:e2e                  # 运行所有 E2E 测试
+npm run test:e2e:ui               # 可视化交互模式
 ```
 
 ---
 
-## Production Build
+## 生产构建
 
-### Backend
+### 后端打包
 
 ```bash
 cd backend
@@ -99,62 +103,60 @@ mvn clean package -DskipTests
 java -jar target/musicshare-backend-*.jar --spring.profiles.active=prod
 ```
 
-### Frontend
+### 前端打包
 
 ```bash
 cd frontend
 npm run build
-# Output in frontend/dist/
+# 构建产物位于 frontend/dist/
 ```
 
-Serve `dist/` with Nginx or any static host. Point API calls to your backend URL by setting `VITE_API_BASE_URL` in `.env.production`.
-
----
-
-## Environment Variables
-
-### Backend (`application.yml` overrides)
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SPRING_DATASOURCE_URL` | `jdbc:mysql://localhost:3306/musicshare` | DB connection |
-| `SPRING_DATASOURCE_USERNAME` | `musicshare` | DB user |
-| `SPRING_DATASOURCE_PASSWORD` | `musicshare123` | DB password |
-| `SPRING_REDIS_HOST` | `localhost` | Redis host |
-| `JWT_SECRET` | (see application.yml) | JWT signing key |
-| `FILE_UPLOAD_PATH` | `./uploads` | Music file storage |
-
-### Frontend (`.env.production`)
+将 `dist/` 目录部署到 Nginx 或任意静态服务器，并在 `.env.production` 中配置后端地址：
 
 ```env
-VITE_API_BASE_URL=https://your-api-domain.com
+VITE_API_BASE_URL=https://你的后端域名.com
 ```
 
 ---
 
-## Docker Compose Services
+## 环境变量
 
-```yaml
-# docker-compose.yml includes:
-musicshare-mysql   # MySQL 8.0  — port 3306
-musicshare-redis   # Redis 7    — port 6379
-musicshare-phpmyadmin  # phpMyAdmin — port 8080
+### 后端（覆盖 `application.yml` 默认值）
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| `SPRING_DATASOURCE_URL` | `jdbc:mysql://localhost:3306/musicshare` | 数据库连接地址 |
+| `SPRING_DATASOURCE_USERNAME` | `musicshare` | 数据库用户名 |
+| `SPRING_DATASOURCE_PASSWORD` | `musicshare123` | 数据库密码 |
+| `SPRING_REDIS_HOST` | `localhost` | Redis 主机地址 |
+| `JWT_SECRET` | （见 application.yml） | JWT 签名密钥 |
+| `FILE_UPLOAD_PATH` | `./uploads` | 音乐文件存储路径 |
+
+### 前端（`.env.production`）
+
+```env
+VITE_API_BASE_URL=https://你的后端域名.com
 ```
+
+---
+
+## Docker Compose 常用命令
 
 ```bash
-docker-compose up -d        # start all
-docker-compose down         # stop all
-docker-compose logs -f      # tail logs
+docker-compose up -d        # 启动所有服务
+docker-compose down         # 停止所有服务
+docker-compose logs -f      # 实时查看日志
+docker-compose ps           # 查看服务状态
 ```
 
 ---
 
-## Project Ports Summary
+## 端口一览
 
-| Service | Port | URL |
-|---------|------|-----|
-| Frontend (dev) | 5173 | http://localhost:5173 |
-| Backend API | 8081 | http://localhost:8081 |
+| 服务 | 端口 | 地址 |
+|------|------|------|
+| 前端（开发） | 5173 | http://localhost:5173 |
+| 后端 API | 8081 | http://localhost:8081 |
 | MySQL | 3306 | — |
 | Redis | 6379 | — |
 | phpMyAdmin | 8080 | http://localhost:8080 |
